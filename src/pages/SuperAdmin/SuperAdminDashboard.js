@@ -95,9 +95,9 @@ function SuperAdminDashboard() {
 
   return (
     
-    <div className="backdrop-blur-none relativetransition duration-500 ease-in-out w-screen h-screen flex justify-center items-center">
-      <div className="flex w-full h-full overflow-hidden lg:h-full flex-col transition duration-500 ease-in-out  justify-center items-start bg-white">
-        <Navbar className="z-50 sticky shadow-none top-0 max-w-screen-xl px-4 py-1 lg:px-8 lg:py-1">
+    <div className="backdrop-blur-none relative transition duration-500 ease-in-out transform w-screen h-screen flex justify-center items-center">
+      <div className="flex w-full h-full overflow-hidden lg:h-full flex-col transition duration-500 ease-in-out transform  justify-center items-start bg-white py-4 px-16 sm:px-4">
+        <Navbar className="z-50 sticky shadow-none top-0 max-w-screen-xl py-1 px-0 lg:py-1">
           <div className="container flex flex-row items-center justify-between text-blue-gray-900">
             <div className="w-full flex items-start justify-start mt-1">
               <img className=" h-10 -ml-2" src={logoImage} alt="Logo"/>
@@ -116,8 +116,8 @@ function SuperAdminDashboard() {
           <CardHeader floated={false} shadow={false} className="rounded-none">
             <div className="mb-8 flex items-center justify-between gap-8">
                 <div>
-                    <Typography variant="h5" color="blue-gray">
-                      Liste des cabinets
+                    <Typography variant="h4" color="blue-gray">
+                      Cabinets
                     </Typography>
                 </div>
                 <div className="flex shrink-0 flex-col gap-2 sm:flex-row">
@@ -128,7 +128,7 @@ function SuperAdminDashboard() {
                 </div>
             </div>
             <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
-              <div className="w-full md:w-72 mb-8">
+              <div className="w-full mb-8">
                 <Input
                   label="Rechercher un cabinet"
                   icon={<MagnifyingGlassIcon className="h-5 w-5" />}
@@ -136,7 +136,7 @@ function SuperAdminDashboard() {
               </div>
             </div>
           </CardHeader>
-          <CardBody className="overflow-scroll px-4">
+          <CardBody className="overflow-scroll px-0">
             <table className="mt-4 w-full min-w-max table-auto text-left border rounded-xl	">
               <thead>
                 <tr>
