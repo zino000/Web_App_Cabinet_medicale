@@ -3,7 +3,7 @@ import Sidebar from "../../components/Sidebar/Sidebar";
 import { SidebarItem } from "../../components/Sidebar/Sidebar";
 import { BrowserRouter as Router, Route,Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import "./ChoicePage.css";
+import "./CabinetLoginPage.css";
 import docsImage from './doctors.svg';
 import logoImage from './medicare_logo.png';
 
@@ -40,7 +40,7 @@ import {
 import { LayoutDashboard, Home, StickyNote, Layers, Flag, Calendar, LifeBuoy, Settings } from "lucide-react";
 
 
-function ChoicePage() {
+function CabinetLoginPage() {
 
   const [open, setOpen] = React.useState(0);
   const [openAlert, setOpenAlert] = React.useState(true);
@@ -181,18 +181,6 @@ function ChoicePage() {
           </List>
         </Card>
       </div> */}
-      <Sidebar>
-          <SidebarItem icon={<Home size={20} />} text="Home" alert />
-          <SidebarItem icon={<LayoutDashboard size={20} />} text="Dashboard" active />
-          <SidebarItem icon={<StickyNote size={20} />} text="Projects" alert />
-          <SidebarItem icon={<Calendar size={20} />} text="Calendar" />
-          <SidebarItem icon={<Layers size={20} />} text="Tasks" />
-          <SidebarItem icon={<Flag size={20} />} text="Reporting" />
-          <hr className="my-3" />
-          <SidebarItem icon={<Settings size={20} />} text="Settings" />
-          <SidebarItem icon={<LifeBuoy size={20} />} text="Help" />
-        </Sidebar>
-
       <div className=" flex w-full h-full sm:h-full flex-row transition duration-500 ease-in-out sm:flex-col  justify-center items-center  bg-login-color p-5 sm:p-2 ">
         <div className='flex-1 flex justify-center items-center '>
           <img className="w-full h-auto max-w-xl sm:max-w-md" src={docsImage} alt="Doctor"/>
@@ -241,4 +229,4 @@ function ChoicePage() {
   );
 }
 
-export default ChoicePage;
+export default CabinetLoginPage;

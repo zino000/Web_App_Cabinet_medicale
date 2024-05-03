@@ -11,6 +11,9 @@ module.exports = withMT({
         'login-color': '#c3e9ed',
         'input-color': '#f2f3f2',
         'submit-color': '#0B8FAC',
+        'super-admin-color': '#E2E9FA',
+        'super-admin-submit': '#353381',
+        'super-admin-submit-hover': '#99c2f1',
       },
       screens: {
         '2xl': {'max': '1535px'},

@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "./App.css";
-import ChoicePage from "./pages/ChoicePage/ChoicePage";
+import CabinetLoginPage from "./pages/CabinetLoginPage/CabinetLoginPage";
+import SuperAdminLogin from "./pages/SuperAdmin/SuperAdminLogin";
+import SuperAdminDashboard from "./pages/SuperAdmin/SuperAdminDashboard";
+import SuperAdminAddCabinet from "./pages/SuperAdmin/SuperAdminAddCabinet";
 
 
 //Providers
@@ -22,7 +25,10 @@ function App() {
   return (
     <Router>
         <Routes>
-            <Route path="/test" element={<ChoicePage />}></Route>
+            <Route path="/admin/login" element={<CabinetLoginPage />}></Route>
+            <Route path="/superAdmin/login" element={<SuperAdminLogin />}></Route>
+            <Route path="/superAdmin/dashboard" element={<SuperAdminDashboard />}></Route>
+            <Route path="/superAdmin/ajouterCabinet" element={<SuperAdminAddCabinet />}></Route>
         </Routes>
       {/* <AdminProvider>
         <Routes>
