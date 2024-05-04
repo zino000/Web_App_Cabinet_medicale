@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import logoImage from './medicare_logo.png';
 
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
-import { PencilIcon, PlusIcon } from "@heroicons/react/24/solid";
+import { PencilIcon, PlusIcon , TrashIcon} from "@heroicons/react/24/solid";
 
 
 
@@ -67,7 +67,7 @@ function SuperAdminDashboard() {
     
 
 
-      const TABLE_HEAD = ["Cabinet", "Adresse", "Email", "Fix", "Code postal"];
+      const TABLE_HEAD = ["Cabinet", "Adresse", "Email", "Fix", "Code postal", "Actions"];
  
     const TABLE_ROWS = [
       {
@@ -121,7 +121,7 @@ function SuperAdminDashboard() {
                     </Typography>
                 </div>
                 <div className="flex shrink-0 flex-col gap-2 sm:flex-row">
-                    <Button className="flex items-center gap-3 border-black border" color="white">
+                    <Button className="flex items-center gap-3 border-blue border" color="indigo">
                         <PlusIcon strokeWidth={2} className="h-4 w-4" />
                         Ajouter un cabinet
                     </Button>
@@ -218,6 +218,14 @@ function SuperAdminDashboard() {
                             >
                                 {code}
                             </Typography>
+                        </td>
+                        <td className={classes}>
+                          <div className="">
+                            <TrashIcon strokeWidth={2} className="h-8 w-8 border rounded bg-red-400 text-white p-1" />
+                          </div>
+                          <div>
+                            <PencilIcon strokeWidth={2} className="h-8 w-8 border rounded bg-black text-white p-1" />
+                          </div>
                         </td>
                       </tr>
                     );
