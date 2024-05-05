@@ -3,6 +3,7 @@ import { SidebarItem } from "../../components/Sidebar/Sidebar";
 import { BrowserRouter as Router, Route,Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import logoImage from './medicare_logo.png';
+import axios from "axios";
 
 import { Input, IconButton, Drawer } from "@material-tailwind/react";
 
@@ -55,6 +56,32 @@ function SuperAdminLogin() {
     setOpen(open === value ? 0 : value);
   };
 
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const navigate = useNavigate();
+
+
+  const handleLogin = async () => {
+    try {
+      const response = await axios.post('http://localhost:3001/login', {
+        username: email,
+        password: password
+      });
+      
+      if (response.status === 200) {
+        navigate('/superAdmin/dashboard');
+      } else {
+        console.log('erreur de connexion');
+      }
+    } catch (error) {
+      console.error('error:', error);
+    }
+  };
+
+
+  
+
+
   return (
     
     <div className="backdrop-blur-none bg-super-admin-color transition duration-500 ease-in-out w-screen h-screen flex justify-center items-center">
@@ -70,33 +97,31 @@ function SuperAdminLogin() {
             </label>
           <div className="w-4/5 flex flex-col items-center justify-center gap-5">
             <div className="w-full flex flex-col items-start justify-start gap-2">
-              {/* <label className="text-base font-semibold">Email</label> */}
-              <Input size="lg" color="blue" type="email" label="Identifiant super-admin" />
+              <Input size="lg" color="blue" type="email" label="Identifiant super-admin" value={email} onChange={(e) => setEmail(e.target.value)} />
             </div>
             <div className="w-full flex flex-col items-start justify-start gap-2">
-              {/* <label className="text-base font-semibold">Mot de passe</label> */}
-              <Input size="lg" color="blue" type="password" label="Code super-admin" icon={<i className="fas fa-lock" />}/>
+              <Input size="lg" color="blue" type="password" label="Code super-admin" icon={<i className="fas fa-lock" />} value={password} onChange={(e) => setPassword(e.target.value)}/>
             </div>
-            <div class="flex w-full items-center justify-start">
-              <label class="relative flex items-center mr-1 rounded-full cursor-pointer" htmlFor="check">
+            <div className="flex w-full items-center justify-start">
+              <label className="relative flex items-center mr-1 rounded-full cursor-pointer" htmlFor="check">
                 <input type="checkbox"
-                  class="before:content[''] peer relative h-4 w-4 cursor-pointer appearance-none rounded-md border border-blue-gray-200 transition-all before:absolute before:top-2/4 before:left-2/4 before:block before:h-12 before:w-12 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-blue-gray-500 before:opacity-0 before:transition-opacity checked:border-gray-900 checked:bg-gray-900 checked:before:bg-gray-900 hover:before:opacity-10"
+                  className="before:content[''] peer relative h-4 w-4 cursor-pointer appearance-none rounded-md border border-blue-gray-200 transition-all before:absolute before:top-2/4 before:left-2/4 before:block before:h-12 before:w-12 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-blue-gray-500 before:opacity-0 before:transition-opacity checked:border-gray-900 checked:bg-gray-900 checked:before:bg-gray-900 hover:before:opacity-10"
                   id="check" />
                 <span
-                  class="absolute text-white transition-opacity opacity-0 pointer-events-none top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 peer-checked:opacity-100">
-                  <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" viewBox="0 0 20 20" fill="currentColor"
-                    stroke="currentColor" stroke-width="1">
-                    <path fill-rule="evenodd"
+                  className="absolute text-white transition-opacity opacity-0 pointer-events-none top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 peer-checked:opacity-100">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" viewBox="0 0 20 20" fill="currentColor"
+                    stroke="currentColor" strokeWidth="1">
+                    <path fillRule="evenodd"
                       d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                      clip-rule="evenodd"></path>
+                      clipRule="evenodd"></path>
                   </svg>
                 </span>
               </label>
-              <label class="mt-px font-light text-gray-700 cursor-pointer select-none" htmlFor="check">
+              <label className="mt-px font-light text-gray-700 cursor-pointer select-none" htmlFor="check">
                 Se souvenir de moi
               </label>
             </div> 
-            <button className="mt-3 mb-6 w-full h-12 text-xl font-medium text-center text-white rounded-md border border-solid border-submit-color bg-super-admin-submit transition duration-500 ease-in-out hover:text-black hover:border-login-color hover:bg-super-admin-submit-hover">
+            <button onClick={handleLogin} className="mt-3 mb-6 w-full h-12 text-xl font-medium text-center text-white rounded-md border border-solid border-submit-color bg-super-admin-submit transition duration-500 ease-in-out hover:text-black hover:border-login-color hover:bg-super-admin-submit-hover">
               Se connecter
             </button>
             

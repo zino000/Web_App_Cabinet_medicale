@@ -14,6 +14,8 @@ module.exports = withMT({
         'super-admin-color': '#E2E9FA',
         'super-admin-submit': '#353381',
         'super-admin-submit-hover': '#99c2f1',
+        'admin-submit': '#446698',
+        'admin-hover': '#B3C4E0',
       },
       screens: {
         '2xl': {'max': '1535px'},

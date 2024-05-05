@@ -5,7 +5,9 @@ import CabinetLoginPage from "./pages/CabinetLoginPage/CabinetLoginPage";
 import SuperAdminLogin from "./pages/SuperAdmin/SuperAdminLogin";
 import SuperAdminDashboard from "./pages/SuperAdmin/SuperAdminDashboard";
 import SuperAdminAddCabinet from "./pages/SuperAdmin/SuperAdminAddCabinet";
-
+import AdminLoginPage from "./pages/AdminPages/AdminLoginPage";
+import SecretaryLoginPage from "./pages/SecretaryPages/SecretaryLoginPage";
+import ChoicePage from "./pages/ChoicePages/ChoicePage";
 
 //Providers
 //import { AdminProvider } from "../Contexts/AdminContext";
@@ -25,7 +27,10 @@ function App() {
   return (
     <Router>
         <Routes>
-            <Route path="/admin/login" element={<CabinetLoginPage />}></Route>
+            <Route path="/cabinet/type-utilisateur" element={<ChoicePage />}></Route>
+            <Route path="/cabinet/login" element={<CabinetLoginPage />}></Route>
+            <Route path="/admin/login" element={<AdminLoginPage />}></Route>
+            <Route path="/secretaire/login" element={<SecretaryLoginPage />}></Route>
             <Route path="/superAdmin/login" element={<SuperAdminLogin />}></Route>
             <Route path="/superAdmin/dashboard" element={<SuperAdminDashboard />}></Route>
             <Route path="/superAdmin/ajouterCabinet" element={<SuperAdminAddCabinet />}></Route>
