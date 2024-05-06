@@ -74,19 +74,19 @@ function ChoicePage() {
                     Veuillez choisir votre rôle
                 </Typography>
                 <div className="w-full h-full flex flex-row items-center justify-between gap-4 p-8">
-                    <div onClick={()=>{navigate("/superAdmin/login")}} className="w-1/3 border-2 rounded-md border-admin-hover flex flex-col items-center justify-center p-2 hover:cursor-pointer hover:scale-105 ease-linear duration-100">
+                    <div onClick={()=>{navigate("/admin/login")}} className="w-1/3 border-2 rounded-md border-admin-hover flex flex-col items-center justify-center p-2 hover:cursor-pointer hover:scale-105 ease-linear duration-100">
                         <img className="w-full" src={adminImage} alt="Logo"/>
                         <Typography className="text-super-admin-submit-hover" variant="h5" color="">
                             Admin
                         </Typography>
                     </div>
-                    <div onClick={()=>{navigate("/superAdmin/login")}} className="w-1/3 border-2 rounded-md border-admin-hover flex flex-col items-center justify-center p-2 hover:cursor-pointer hover:scale-105 ease-linear duration-100">
+                    <div onClick={()=>{navigate("/doctor/login")}} className="w-1/3 border-2 rounded-md border-admin-hover flex flex-col items-center justify-center p-2 hover:cursor-pointer hover:scale-105 ease-linear duration-100">
                         <img className="w-full" src={docImage} alt="Logo"/>
                         <Typography className="text-super-admin-submit-hover" variant="h5" color="">
                             Docteur
                         </Typography>
                     </div>
-                    <div onClick={()=>{navigate("/superAdmin/login")}} className="w-1/3 border-2 rounded-md border-admin-hover flex flex-col items-center justify-center p-2 hover:cursor-pointer hover:scale-105 ease-linear duration-100">
+                    <div onClick={()=>{navigate("/secretaire/login")}} className="w-1/3 border-2 rounded-md border-admin-hover flex flex-col items-center justify-center p-2 hover:cursor-pointer hover:scale-105 ease-linear duration-100">
                         <img className="w-full" src={secImage} alt="Logo"/>
                         <Typography className="text-super-admin-submit-hover" variant="h5" color="">
                             Secrétaire

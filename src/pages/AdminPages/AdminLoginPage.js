@@ -57,6 +57,7 @@ function AdminLoginPage() {
     setOpen(open === value ? 0 : value);
   };
 
+  const navigate = useNavigate();
   return (
     
     <div className="backdrop-blur-none	 bg-login-color transition duration-500 ease-in-out w-screen h-screen flex justify-center items-center">
@@ -216,7 +217,7 @@ function AdminLoginPage() {
                 Se souvenir de moi
               </label>
             </div> 
-            <button className="mt-3 mb-6 w-full h-12 text-xl font-medium text-center text-white rounded-md border border-solid border-submit-color bg-admin-submit transition duration-500 ease-in-out hover:text-black hover:border-admin-hover hover:bg-admin-hover">
+            <button onClick={()=> {navigate("/admin/dashboard")}} className="mt-3 mb-6 w-full h-12 text-xl font-medium text-center text-white rounded-md border border-solid border-submit-color bg-admin-submit transition duration-500 ease-in-out hover:text-black hover:border-admin-hover hover:bg-admin-hover">
               Se connecter
             </button>
             

@@ -3,8 +3,7 @@ import Sidebar from "../../components/Sidebar/Sidebar";
 import { SidebarItem } from "../../components/Sidebar/Sidebar";
 import { BrowserRouter as Router, Route,Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import "./CabinetLoginPage.css";
-import docsImage from './doctors.svg';
+import docsImage from './doc.png';
 import logoImage from './medicare_logo.png';
 
 import { Input, IconButton, Drawer } from "@material-tailwind/react";
@@ -40,7 +39,7 @@ import {
 import { LayoutDashboard, Home, StickyNote, Layers, Flag, Calendar, LifeBuoy, Settings } from "lucide-react";
 
 
-function CabinetLoginPage() {
+function DoctorLoginPage() {
 
   const [open, setOpen] = React.useState(0);
   const [openAlert, setOpenAlert] = React.useState(true);
@@ -58,25 +57,24 @@ function CabinetLoginPage() {
     setOpen(open === value ? 0 : value);
   };
 
-  const navigate = useNavigate();
   return (
     
     <div className="backdrop-blur-none	 bg-login-color transition duration-500 ease-in-out w-screen h-screen flex justify-center items-center">
-      
       <div className=" flex w-full h-full sm:h-full flex-row transition duration-500 ease-in-out sm:flex-col  justify-center items-center  bg-login-color p-5 sm:p-2 ">
-        <div className='flex-1 flex justify-center items-center '>
-          <img className="w-full h-auto max-w-xl sm:max-w-md" src={docsImage} alt="Doctor"/>
+        <div className='flex-1 flex justify-center items-center'>
+          <img className="w-full h-auto max-w-2xl sm:max-w-md" src={docsImage} alt="Doctor"/>
         </div>
         <div className="flex flex-1 max-w-xl rounded-xl bg-white items-center justify-center flex-col p-5 lg:p-2 mx-4  my-0">
           <div className="w-full flex items-center justify-center my-6">
-            {/* <img className="w-1/2" src={logoImage} alt="Logo"/> */}
-            <label className="border-2 w-2/6 h-12 flex items-center justify-center">Logo du cabinet</label>
+            <img className="w-1/2" src={logoImage} alt="Logo"/>
           </div>
           <div className="w-4/5 flex flex-col items-center justify-center gap-5">
             <div className="w-full flex flex-col items-start justify-start gap-2">
+              {/* <label className="text-base font-semibold">Email</label> */}
               <Input size="lg" color="blue" type="email" label="Adresse mail" />
             </div>
             <div className="w-full flex flex-col items-start justify-start gap-2">
+              {/* <label className="text-base font-semibold">Mot de passe</label> */}
               <Input size="lg" color="blue" type="password" label="Mot de passe" icon={<i className="fas fa-lock" />}/>
             </div>
             <div class="flex w-full items-center justify-start">
@@ -98,7 +96,7 @@ function CabinetLoginPage() {
                 Se souvenir de moi
               </label>
             </div> 
-            <button onClick={()=> {navigate("/cabinet/type-utilisateur")}} className="mt-3 mb-6 w-full h-12 text-xl font-medium text-center text-white rounded-md border border-solid border-submit-color bg-submit-color transition duration-500 ease-in-out hover:text-black hover:border-login-color hover:bg-login-color">
+            <button className="mt-3 mb-6 w-full h-12 text-xl font-medium text-center text-white rounded-md border border-solid border-submit-color bg-admin-submit transition duration-500 ease-in-out hover:text-black hover:border-admin-hover hover:bg-admin-hover">
               Se connecter
             </button>
             
@@ -110,4 +108,4 @@ function CabinetLoginPage() {
   );
 }
 
-export default CabinetLoginPage;
+export default DoctorLoginPage;
