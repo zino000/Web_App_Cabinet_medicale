@@ -1,4 +1,5 @@
 import React, { useState, useEffect} from "react";
+import axios from 'axios';
 import Sidebar from "../../components/Sidebar/Sidebar";
 import { SidebarItem } from "../../components/Sidebar/Sidebar";
 import { BrowserRouter as Router, Route,Link } from "react-router-dom";
@@ -58,6 +59,31 @@ function CabinetLoginPage() {
     setOpen(open === value ? 0 : value);
   };
 
+  const [code, setCode] = useState('');
+  const [password, setPassword] = useState('');
+
+  function loginClinic(){
+    axios.post('http://localhost:3002/loginToClinic', {
+        "code": code,
+        "password": password,
+    })
+    .then(function (response) {
+        console.log(response);
+        // console.log(response.data.role);
+        // token = response.data.accessToken ;
+        // Stocker le token dans le localStorage si la demande de connexion réussit
+        localStorage.setItem('access-token-clinic', response.data.accessToken);
+        localStorage.setItem('clinic-database', response.data.clinicDbName);
+        navigate('/cabinet/type-utilisateur')
+        // localStorage.setItem('role', response.data.role);
+        // getClinics()
+        //loginByRole()
+    })
+    .catch(function (error) {
+        console.log(error);
+    });
+  }
+
   const navigate = useNavigate();
   return (
     
@@ -74,10 +100,10 @@ function CabinetLoginPage() {
           </div>
           <div className="w-4/5 flex flex-col items-center justify-center gap-5">
             <div className="w-full flex flex-col items-start justify-start gap-2">
-              <Input size="lg" color="blue" type="email" label="Adresse mail" />
+              <Input size="lg" color="blue" type="email" label="Adresse mail" value={code} onChange={(e) => setCode(e.target.value)}/>
             </div>
             <div className="w-full flex flex-col items-start justify-start gap-2">
-              <Input size="lg" color="blue" type="password" label="Mot de passe" icon={<i className="fas fa-lock" />}/>
+              <Input size="lg" color="blue" type="password" label="Mot de passe" icon={<i className="fas fa-lock" />} value={password} onChange={(e) => setPassword(e.target.value)}/>
             </div>
             <div class="flex w-full items-center justify-start">
               <label class="relative flex items-center mr-1 rounded-full cursor-pointer" htmlFor="check">
@@ -98,7 +124,7 @@ function CabinetLoginPage() {
                 Se souvenir de moi
               </label>
             </div> 
-            <button onClick={()=> {navigate("/cabinet/type-utilisateur")}} className="mt-3 mb-6 w-full h-12 text-xl font-medium text-center text-white rounded-md border border-solid border-submit-color bg-submit-color transition duration-500 ease-in-out hover:text-black hover:border-login-color hover:bg-login-color">
+            <button onClick={loginClinic} className="mt-3 mb-6 w-full h-12 text-xl font-medium text-center text-white rounded-md border border-solid border-submit-color bg-submit-color transition duration-500 ease-in-out hover:text-black hover:border-login-color hover:bg-login-color">
               Se connecter
             </button>
             

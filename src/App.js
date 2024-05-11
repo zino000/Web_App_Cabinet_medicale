@@ -10,6 +10,9 @@ import SecretaryLoginPage from "./pages/SecretaryPages/SecretaryLoginPage";
 import ChoicePage from "./pages/ChoicePages/ChoicePage";
 import AdminDashboard from "./pages/AdminPages/AdminDashboard";
 import DoctorLoginPage from "./pages/DoctorPages/DoctorLoginPage";
+import Test from "./test";
+import AdminRDV from "./pages/AdminPages/AdminRDV";
+import AdminPatients from "./pages/AdminPages/AdminPatients";
 
 
 //Providers
@@ -30,6 +33,7 @@ function App() {
   return (
     <Router>
         <Routes>
+            <Route path="/" element={<Test />}></Route>
             <Route path="/cabinet/type-utilisateur" element={<ChoicePage />}></Route>
             <Route path="/cabinet/login" element={<CabinetLoginPage />}></Route>
             <Route path="/admin/login" element={<AdminLoginPage />}></Route>
@@ -38,6 +42,8 @@ function App() {
             <Route path="/superAdmin/login" element={<SuperAdminLogin />}></Route>
             <Route path="/superAdmin/dashboard" element={<SuperAdminDashboard />}></Route>
             <Route path="/admin/dashboard" element={<AdminDashboard />}></Route>
+            <Route path="/admin/patients" element={<AdminPatients />}></Route>
+            <Route path="/admin/rdv" element={<AdminRDV />}></Route>
             <Route path="/superAdmin/ajouterCabinet" element={<SuperAdminAddCabinet />}></Route>
         </Routes>
       {/* <AdminProvider>

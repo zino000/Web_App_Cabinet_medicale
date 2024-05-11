@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Route,Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import docsImage from './sec.png';
 import logoImage from './medicare_logo.png';
+import axios from "axios";
 
 import { Input, IconButton, Drawer } from "@material-tailwind/react";
 
@@ -42,6 +43,38 @@ import { LayoutDashboard, Home, StickyNote, Layers, Flag, Calendar, LifeBuoy, Se
 function SecretaryLoginPage() {
 
  
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const navigate = useNavigate();
+
+
+  function loginByRole(){
+    const token = localStorage.getItem('access-token-clinic');
+    const clinic_database = localStorage.getItem('clinic-database');
+    console.log(clinic_database);
+
+    axios.post('http://localhost:3002/loginByRole', {
+        "email": email,
+        "password": password,
+        "role": "secretary"
+    } , {
+        headers : {
+            "access-token-clinic": token ,
+            "clinic-database" : clinic_database
+        }
+    })
+    .then(function (response) {
+        console.log(response);
+        localStorage.setItem('role', response.data.role);
+        localStorage.setItem('id', response.data.id);
+        localStorage.setItem('access-token', response.data.accessToken);
+        navigate("/admin/dashboard");
+
+    })
+    .catch(function (error) {
+        console.log(error);
+    });
+  }
 
   return (
     
@@ -55,11 +88,11 @@ function SecretaryLoginPage() {
           <div className="w-4/5 flex flex-col items-center justify-center gap-5">
             <div className="w-full flex flex-col items-start justify-start gap-2">
               {/* <label className="text-base font-semibold">Email</label> */}
-              <Input size="lg" color="blue" type="email" label="Adresse mail" />
+              <Input size="lg" color="blue" type="email" label="Adresse mail" value={email} onChange={(e) => setEmail(e.target.value)}/>
             </div>
             <div className="w-full flex flex-col items-start justify-start gap-2">
               {/* <label className="text-base font-semibold">Mot de passe</label> */}
-              <Input size="lg" color="blue" type="password" label="Mot de passe" icon={<i className="fas fa-lock" />}/>
+              <Input size="lg" color="blue" type="password" label="Mot de passe" icon={<i className="fas fa-lock" />} value={password} onChange={(e) => setPassword(e.target.value)}/>
             </div>
             <div class="flex w-full items-center justify-start">
               <label class="relative flex items-center mr-1 rounded-full cursor-pointer" htmlFor="check">
@@ -80,7 +113,7 @@ function SecretaryLoginPage() {
                 Se souvenir de moi
               </label>
             </div> 
-            <button className="mt-3 mb-6 w-full h-12 text-xl font-medium text-center text-white rounded-md border border-solid border-submit-color bg-admin-submit transition duration-500 ease-in-out hover:text-black hover:border-admin-hover hover:bg-admin-hover">
+            <button onClick={loginByRole} className="mt-3 mb-6 w-full h-12 text-xl font-medium text-center text-white rounded-md border border-solid border-submit-color bg-admin-submit transition duration-500 ease-in-out hover:text-black hover:border-admin-hover hover:bg-admin-hover">
               Se connecter
             </button>
             

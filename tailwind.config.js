@@ -26,6 +26,9 @@ module.exports = withMT({
   
         'lg': {'max': '1023px'},
         // => @media (max-width: 1023px) { ... }
+        
+        'sidebar-size': {'max': '890px'},
+        // => @media (max-width: 890px) { ... }
   
         'md': {'max': '767px'},
         // => @media (max-width: 767px) { ... }

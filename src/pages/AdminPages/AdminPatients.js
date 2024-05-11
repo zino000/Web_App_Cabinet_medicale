@@ -65,7 +65,7 @@ import { setId } from "@material-tailwind/react/components/Tabs/TabsContext";
 
    
 
-function AdminDashboard() {
+function AdminPatients() {
 
 
   const navigate = useNavigate();
@@ -172,72 +172,9 @@ function AdminDashboard() {
     setSelectedRole(event.target.value);
   }
 
-  const handleAddUser = async () => {
-    const token = localStorage.getItem('access-token');
-    const role = localStorage.getItem('role');
-    const clinicDb = localStorage.getItem('clinic-database');
+  
 
-    // Vérifier si le token est disponible
-    if (token) {
-        // Ajouter le token dans les en-têtes de la requête
-        axios.post('http://localhost:3002/users', {
-            	
-            "last_name": nom,
-            "first_name": prenom,
-            "email": email,
-            "password": password,
-            "role": selectedRole,
-            "clinic_id": cdb
-
-        } , {
-            headers: {
-                // 'Authorization': `Bearer ${token}` ,
-                'access-token': token ,
-                'clinic-database': clinicDb ,
-                'role' : role
-            }
-        })
-        .then(response => {
-            console.log(response);
-            handleCancel();
-            navigate("/admin/dashboard");
-        })
-        .catch(error => {
-            console.log(error);
-        });
-    } else {
-        console.log("Token d'authentification non disponible.");
-    }
-  };
-
-  const handleDeleteUser = (UserIdDelete) => {
-    const tokens = localStorage.getItem('access-token');
-    const roles = localStorage.getItem('role');
-    const clinicDbs = localStorage.getItem('clinic-database');
-
-    // Vérifier si le token est disponible
-    if (UserIdDelete =! null) {
-        // Ajouter le token dans les en-têtes de la requête
-        axios.delete(`http://localhost:3002/users/${UserIdDelete}`, {
-            headers: {
-                // 'Authorization': `Bearer ${token}` ,
-                'access-token': tokens ,
-                'clinic-database': clinicDbs ,
-                'role' : roles
-            }
-        })
-        .then(response => {
-            console.log(response);
-            handleCancel();
-            navigate("/admin/dashboard");
-        })
-        .catch(error => {
-            console.log(error);
-        });
-    } else {
-        console.log("Token d'authentification non disponible.");
-    }
-}
+  
   
 
   return (
@@ -379,7 +316,7 @@ function AdminDashboard() {
                           </IconButton>
                         </Tooltip>
                         { ((role == "doctor") || (role == "secretary")) && (
-                          <Tooltip onClick={handleDeleteUser(id)} content="Modifier utilisateur">
+                          <Tooltip content="Modifier utilisateur">
                             <IconButton  variant="text">
                               <TrashIcon  className="h-4 w-4" color="red"/>
                             </IconButton>
@@ -469,7 +406,7 @@ function AdminDashboard() {
                       </div>
                     </div>
                     <div className="bg-gray-50 px-4 py-3 2xl:flex 2xl:flex-row-reverse 2xl:px-6">
-                      <button onClick={handleAddUser} type="button" className="inline-flex w-full justify-center rounded-md bg-super-admin-submit px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-900 2xl:ml-3 2xl:w-auto">Enregistrer</button>
+                      <button  type="button" className="inline-flex w-full justify-center rounded-md bg-super-admin-submit px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-900 2xl:ml-3 2xl:w-auto">Enregistrer</button>
                       <button onClick={()=>{setDisplayed(null)}} type="button" className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 2xl:mt-0 2xl:w-auto">Annuler</button>
                     </div>
                   </div>
@@ -482,4 +419,4 @@ function AdminDashboard() {
   );
 }
 
-export default AdminDashboard;
+export default AdminPatients;
