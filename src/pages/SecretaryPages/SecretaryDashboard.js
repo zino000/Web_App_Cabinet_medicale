@@ -3,8 +3,9 @@ import Sidebar from "../../components/Sidebar/Sidebar";
 import { SidebarItem } from "../../components/Sidebar/Sidebar";
 import { BrowserRouter as Router, Route,Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import { WalletMinimal, Users, Hospital } from "lucide-react";
+import { WalletMinimal, Users, Hospital, TrashIcon } from "lucide-react";
 import { useCountries } from "use-react-countries";
+import axios from "axios";
 
 import {
   List,
@@ -61,10 +62,10 @@ import { LayoutDashboard, Home, StickyNote, Layers, Flag, Calendar, LifeBuoy, Se
 
    
 
-function DoctorDashboard() {
+function SecretaryDashboard() {
 
 
-    
+  const navigate = useNavigate();
 
   const [open, setOpen] = React.useState(0);
   const [openAlert, setOpenAlert] = React.useState(true);
@@ -87,55 +88,9 @@ function DoctorDashboard() {
     },
   ];
 
-  const TABLE_HEAD = ["Membre", "email", "Fonction", "Téléphone", "Actions",];
+  const TABLE_HEAD = ["Patient", "email", "Date de naissance", "Téléphone", "Actions",];
 
-  const TABLE_ROWS = [
-    {
-      img: "https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-3.jpg",
-      name: "BENHIMA Salah",
-      email: "bnhhali@gmail.com",
-      job: "Manager",
-      org: "Organization",
-      online: true,
-      date: "0736382678",
-    },
-    {
-      img: "https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-2.jpg",
-      name: "BACHA Zinelabidine",
-      email: "bacha@gmail.com",
-      job: "Programator",
-      org: "Developer",
-      online: false,
-      date: "0736382678",
-    },
-    {
-      img: "https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-1.jpg",
-      name: "ELBHIHE Hamza",
-      email: "elbhihehamza@gmail.com",
-      job: "Executive",
-      org: "Projects",
-      online: false,
-      date: "0736382678",
-    },
-    {
-      img: "https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-4.jpg",
-      name: "BLJ Anass",
-      email: "bljanass@gmail.com",
-      job: "Programator",
-      org: "Developer",
-      online: true,
-      date: "0736382678",
-    },
-    {
-      img: "https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-5.jpg",
-      name: "RAMI Salah",
-      email: "ramisalah@gmail.com",
-      job: "Manager",
-      org: "Executive",
-      online: false,
-      date: "0736382678",
-    },
-  ];
+  
   
   const toggleSidebar = () => {
     setShowSidebar(!showSidebar);
@@ -148,9 +103,155 @@ function DoctorDashboard() {
     setOpen(open === value ? 0 : value);
   };
 
-  const handleDeleteConfirmation = () => {
-    setIdToDelete(null);
+  
+
+  
+
+
+  const [users, setUsers] = useState([]);
+  const [clinicDb, setClinicDb] = useState([]);
+
+  const handleCancel = () => {
+    setDisplayed(0);
   };
+
+  
+  
+  
+
+  const cdb = localStorage.getItem('clinic-database');
+  useEffect(() => {
+    const token = localStorage.getItem('access-token');
+    const role = localStorage.getItem('role');
+    const clinicDb = localStorage.getItem('clinic-database');
+
+    const fetchUsers = async () => {
+      const token = localStorage.getItem('access-token');
+      const role = localStorage.getItem('role');
+      setClinicDb(cdb);
+      if(cdb){
+        try {
+          axios.get('http://localhost:3002/patients', {
+              headers: {
+                  // 'Authorization': Bearer ${token} ,
+                  'access-token': token ,
+                  'clinic-database': cdb ,
+                  'role' : role
+              }
+          })
+          .then(response => {
+              //console.log(response.data[0].role);
+                
+                if(response.data){
+                    setUsers(response.data);
+                }
+                console.log(users);
+          })
+          .catch(error => {
+              console.log(error);
+          });
+        } catch (error) {
+          console.log("Token d'authentification non disponible.");
+        }
+      }
+    };
+  
+    fetchUsers();
+  }, []);
+
+  const TABLE_ROWS = users;
+
+
+  const [nom, setNom] = useState();
+  const [prenom, setPrenom] = useState();
+  const [email, setEmail] = useState();
+  const [phone, setPhone] = useState();
+  const [selectedGender, setSelectedGender] = useState();
+  const [date, setDate] = useState();
+  const [docId, setDocId] = useState();
+  const [displayed, setDisplayed] = useState();
+  const [docs, setDocs] = useState([]);
+
+
+
+  const handleSelection = (event) =>{
+    setSelectedGender(event.target.value);
+  }
+
+  const handleDocSelection = (event) =>{
+    setDocId(event.target.value);
+  }
+
+  const handleDeleteUser = (UserIdDelete) => {
+    const tokens = localStorage.getItem('access-token');
+    const roles = localStorage.getItem('role');
+    const clinicDbs = localStorage.getItem('clinic-database');
+    
+    // Vérifier si le token est disponible
+    if (UserIdDelete =! 0) {
+        // Ajouter le token dans les en-têtes de la requête
+        axios.delete(`http://localhost:3002/users/${UserIdDelete}`, {
+            headers: {
+                // 'Authorization': `Bearer ${token}` ,
+                'access-token': tokens ,
+                'clinic-database': clinicDbs ,
+                'role' : roles
+            }
+        })
+        .then(response => {
+            console.log(response);
+            handleCancel();
+            navigate("/admin/dashboard");
+        })
+        .catch(error => {
+            console.log(error);
+        });
+    } else {
+        console.log("Token d'authentification non disponible.");
+    }
+}
+
+  const handleAddPatient = async () => {
+    const token = localStorage.getItem('access-token');
+    const role = localStorage.getItem('role');
+    const clinicDb = localStorage.getItem('clinic-database');
+
+    // Vérifier si le token est disponible
+    if (token) {
+        // Ajouter le token dans les en-têtes de la requête
+        axios.post('http://localhost:3002/patients', {
+            	
+            "last_name": nom,
+            "first_name": prenom,
+            "email": email,
+            "phone": phone,
+            "gender": selectedGender,
+            "date_of_birth": date,
+            "doctor_id": docId
+
+        } , {
+            headers: {
+                // 'Authorization': `Bearer ${token}` ,
+                'access-token': token ,
+                'clinic-database': clinicDb ,
+                'role' : role
+            }
+        })
+        .then(response => {
+            console.log(response);
+            handleCancel();
+            navigate("/secretaire/dashboard");
+        })
+        .catch(error => {
+            console.log(error);
+        });
+    } else {
+        console.log("Token d'authentification non disponible.");
+    }
+  };
+
+    
+  
 
   return (
     
@@ -162,20 +263,18 @@ function DoctorDashboard() {
           <SidebarItem icon={<Calendar size={20} />} text="Rendez-vous" />
           <SidebarItem icon={<WalletMinimal size={20} />} text="Paiements" />
           <hr className="my-3" />
-          <SidebarItem icon={<Settings size={20} />} text="Paramètres" />
-          <SidebarItem icon={<LifeBuoy size={20} />} text="Assistance" />
         </Sidebar>
         <Card className="h-full w-full rounded-none">
           <CardHeader floated={false} shadow={false} className="rounded-none">
           <div className="mb-8 flex items-center justify-between gap-8">
             <div>
               <Typography variant="h5" color="blue-gray">
-                Liste des membres du cabinet
+                Liste des patients
               </Typography>
             </div>
             <div className="flex shrink-0 flex-col gap-2 2xl:flex-row">
-              <Button onClick={() => setIdToDelete(1)} className="flex items-center gap-3" size="sm">
-                <UserPlusIcon strokeWidth={2} className="h-4 w-4" /> Ajouter un membre
+              <Button onClick={() => setDisplayed(1)} className="flex items-center gap-3" size="sm">
+                <UserPlusIcon strokeWidth={2} className="h-4 w-4" /> Ajouter un patient
               </Button>
             </div>
           </div>
@@ -211,14 +310,14 @@ function DoctorDashboard() {
             </thead>
             <tbody>
               {TABLE_ROWS.map(
-                ({ img, name, email, job, org, online, date }, index) => {
+                ({ id, first_name, last_name, email, date_of_birth, phone }, index) => {
                   const isLast = index === TABLE_ROWS.length - 1;
                   const classes = isLast
                     ? "p-4"
                     : "p-4 border-b border-blue-gray-50";
                 
                   return (
-                    <tr key={name}>
+                    <tr key={id}>
                       <td className={classes}>
                         <div className="flex items-center gap-3">
                           <div className="flex flex-col">
@@ -227,7 +326,7 @@ function DoctorDashboard() {
                               color="blue-gray"
                               className="font-normal"
                             >
-                              {name}
+                              {first_name} {last_name}
                             </Typography>
                             
                           </div>
@@ -246,30 +345,29 @@ function DoctorDashboard() {
                         </div>
                       </td>
                       <td className={classes}>
-                        <div className="w-max">
-                          <Chip
-                            variant="ghost"
-                            size="sm"
-                            value={online ? "docteur" : "secrétaire"}
-                            color={online ? "green" : "blue-gray"}
-                          />
+                        <div className="flex flex-col">
+                          <Typography
+                            variant="small"
+                            color="blue-gray"
+                            className="font-normal"
+                          >
+                            {new Intl.DateTimeFormat('en-EN', { day: '2-digit', month: '2-digit', year: 'numeric' }).format(new Date(date_of_birth))}
+                          </Typography>
+                          
                         </div>
                       </td>
+
                       <td className={classes}>
                         <Typography
                           variant="small"
                           color="blue-gray"
                           className="font-normal"
                         >
-                          {date}
+                          {phone}
                         </Typography>
                       </td>
                       <td className={classes}>
-                        <Tooltip content="Modifier utilisateur">
-                          <IconButton variant="text">
-                            <PencilIcon className="h-4 w-4" />
-                          </IconButton>
-                        </Tooltip>
+                        <Button className=" bg-red-400 p-2">Supprimer</Button>
                       </td>
                     </tr>
                   );
@@ -292,7 +390,8 @@ function DoctorDashboard() {
           </div>
         </CardFooter>
         </Card>
-        {idToDelete && (
+        { displayed ? (
+
             <div className="relative z-20" aria-labelledby="modal-title" role="dialog" aria-modal="true">
               <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
               <div className="fixed inset-0 z-10 w-screen overflow-y-auto">
@@ -306,42 +405,66 @@ function DoctorDashboard() {
                               <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-first-name">
                                 Prénom
                               </label>
-                              <input class="appearance-none block w-full bg-gray-200 text-gray-700 border  rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-first-name" type="text" placeholder="MED"/>
+                              <input class="appearance-none block w-full bg-gray-200 text-gray-700 border  rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-first-name" type="text" placeholder="MED" value={prenom} onChange={(e) => setPrenom(e.target.value)}/>
                               {/* <p class="text-red-500 text-xs italic">Please fill out this field.</p> */}
                             </div>
                             <div class="w-full md:w-1/2 px-3">
                               <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-last-name">
                                 Nom
                               </label>
-                              <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-last-name" type="text" placeholder="SIX"/>
+                              <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-last-name" type="text" placeholder="SIX" value={nom} onChange={(e) => setNom(e.target.value)}/>
+                            </div>
+                            <div class="w-full md:w-1/2 px-3">
+                              <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-last-name">
+                                date de naissance
+                              </label>
+                              <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-last-name" type="date" placeholder="SIX" value={date} onChange={(e) => setDate(e.target.value)}/>
                             </div>
                           </div>
                           <div class="flex mx-3 mb-6">
                             <div class="w-full px-3">
-                              <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-password">
+                              <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-password" >
                                 Email
                               </label>
-                              <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-password" type="email" placeholder="exemple@gmail.com"/>
+                              <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-password" type="email" placeholder="exemple@gmail.com" value={email} onChange={(e) => setEmail(e.target.value)}/>
                               {/* <p class="text-gray-600 text-xs italic">Make it as long and as crazy as you'd like</p> */}
                             </div>
                           </div>
                           <div class="flex mx-3 mb-2">
                             <div class="w-full md:w-1/3 px-3 mb-6 md:mb-0">
                               <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-password">
-                                Mot de passe
+                                Numéro de téléphone
                               </label>
-                              <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-password" type="password" placeholder="******************"/>
+                              <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-password" type="number" placeholder="0612345678" value={phone} onChange={(e) => setPhone(e.target.value)}/>
                               {/* <p class="text-gray-600 text-xs italic">Make it as long and as crazy as you'd like</p> */}
                             </div>
                             <div class="w-4/6 px-3 mb-6 md:mb-0">
                               <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-state">
-                                Rôle
+                                Genre
                               </label>
                               <div class="relative">
-                                <select class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-state">
-                                  <option>Choisir</option>
-                                  <option>Docteur</option>
-                                  <option>Secrétaire</option>
+                                <select name="roler" class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-state" value={selectedGender} onChange={handleSelection}>
+                                  <option value="">Choisir</option>
+                                  <option value="M">M</option>
+                                  <option value="F">F</option>
+                                </select>
+                                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                                  <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="w-4/6 px-3 mb-6 md:mb-0">
+                              <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-state">
+                                Docteur
+                              </label>
+                              <div class="relative">
+                                <select name="roler" class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-state" value={docId} onChange={handleDocSelection}>
+                                  <option value="">Choisir</option>
+                                    {
+                                        docs.map((item) => (
+                                            <option key={item.id} value={item.id}>{item.first_name} {item.last_name}</option>)
+                                        )
+                                    }
                                 </select>
                                 <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
                                   <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
@@ -353,17 +476,20 @@ function DoctorDashboard() {
                       </div>
                     </div>
                     <div className="bg-gray-50 px-4 py-3 2xl:flex 2xl:flex-row-reverse 2xl:px-6">
-                      <button onClick={handleDeleteConfirmation} type="button" className="inline-flex w-full justify-center rounded-md bg-super-admin-submit px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-900 2xl:ml-3 2xl:w-auto">Enregistrer</button>
-                      <button onClick={handleDeleteConfirmation} type="button" className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 2xl:mt-0 2xl:w-auto">Annuler</button>
+                      <button onClick={handleAddPatient} type="button" className="inline-flex w-full justify-center rounded-md bg-super-admin-submit px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-900 2xl:ml-3 2xl:w-auto">Enregistrer</button>
+                      <button onClick={()=>{setDisplayed(0)}} type="button" className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 2xl:mt-0 2xl:w-auto">Annuler</button>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-        )}
+        ) : (
+            <></>
+        )
+        }
     </div>
 
   );
 }
 
-export default DoctorDashboard;
+export default SecretaryDashboard;

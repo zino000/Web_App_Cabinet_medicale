@@ -61,7 +61,6 @@ import {
   MagnifyingGlassIcon,
 } from "@heroicons/react/24/outline";
 import { LayoutDashboard, Home, StickyNote, Layers, Flag, Calendar, LifeBuoy, Settings } from "lucide-react";
-import { setId } from "@material-tailwind/react/components/Tabs/TabsContext";
 
    
 
@@ -379,7 +378,8 @@ function AdminDashboard() {
                           </IconButton>
                         </Tooltip>
                         { ((role == "doctor") || (role == "secretary")) && (
-                          <Tooltip onClick={handleDeleteUser(id)} content="Modifier utilisateur">
+                          
+                          <Tooltip content="Modifier utilisateur">
                             <IconButton  variant="text">
                               <TrashIcon  className="h-4 w-4" color="red"/>
                             </IconButton>

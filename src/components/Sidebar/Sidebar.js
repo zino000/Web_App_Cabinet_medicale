@@ -28,7 +28,8 @@ import {
     Option,
     Input, 
     IconButton, 
-    Drawer
+    Drawer,
+    Timeline
   } from "@material-tailwind/react";
   import {
     PresentationChartBarIcon,
@@ -64,6 +65,11 @@ export default function Sidebar({ children }) {
     const [open, setOpen] = React.useState(0);
     const [openAlert, setOpenAlert] = React.useState(true);
     const [isDrawerOpen, setIsDrawerOpen] = React.useState(false);
+    const [role, setRole] = React.useState(null);
+
+    useEffect(() => {
+      setRole(localStorage.getItem('role'));
+    }, []);
    
     const handleOpen = (value) => {
       setOpen(open === value ? 0 : value);
@@ -81,11 +87,13 @@ export default function Sidebar({ children }) {
                     </div>
 
                     <List className="sm:flex-row">
-                      <ListItem className={`${expanded ? "" : "w-11"} `}>
+                    { (role == "admin") &&
+
+                      <ListItem onClick={()=>{navigate('/admin/dashboard')}} className={`${expanded ? "" : "w-11"} `}>
                         <ListItemPrefix>
                           <InboxIcon className="h-5 w-5" />
                         </ListItemPrefix>
-                        {expanded ? "Inbox" : ""}
+                        {expanded ? "Accueil" : ""}
                         <ListItemSuffix>
                         {expanded ? (
 
@@ -95,6 +103,33 @@ export default function Sidebar({ children }) {
                         )}
                         </ListItemSuffix>
                       </ListItem>
+                    }
+                    { (role == "secretary") &&
+
+                      <ListItem onClick={()=>{navigate('/secretaire/dashboard')}} className={`${expanded ? "" : "w-11"} `}>
+                        <ListItemPrefix>
+                          <InboxIcon className="h-5 w-5" />
+                        </ListItemPrefix>
+                        {expanded ? "Patients" : ""}
+                        <ListItemSuffix>
+                        {expanded ? (
+
+                          <Chip value="14" size="sm" variant="ghost" color="blue-gray" className="rounded-full transition-all" />
+                        ) : (
+                            ""
+                        )}
+                        </ListItemSuffix>
+                      </ListItem>
+                    }
+                    { (role == "secretary") &&
+
+                      <ListItem onClick={()=>{navigate('/secretaire/dashboard')}} className={`${expanded ? "" : "w-11"} `}>
+                        <ListItemPrefix>
+                          <Calendar className="h-5 w-5" />
+                        </ListItemPrefix>
+                        {expanded ? "Rendez-vous" : ""}
+                      </ListItem>
+                    }
                       <ListItem className={`${expanded ? "" : "w-11"} `}>
                         <ListItemPrefix>
                           <UserCircleIcon className="h-5 w-5" />

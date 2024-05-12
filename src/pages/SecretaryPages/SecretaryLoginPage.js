@@ -56,7 +56,7 @@ function SecretaryLoginPage() {
     axios.post('http://localhost:3002/loginByRole', {
         "email": email,
         "password": password,
-        "role": "secretary"
+        "role": "secretary",
     } , {
         headers : {
             "access-token-clinic": token ,
@@ -68,7 +68,7 @@ function SecretaryLoginPage() {
         localStorage.setItem('role', response.data.role);
         localStorage.setItem('id', response.data.id);
         localStorage.setItem('access-token', response.data.accessToken);
-        navigate("/admin/dashboard");
+        navigate("/secretaire/dashboard");
 
     })
     .catch(function (error) {
