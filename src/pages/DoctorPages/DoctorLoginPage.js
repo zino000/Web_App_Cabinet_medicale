@@ -83,7 +83,7 @@ function DoctorLoginPage() {
         localStorage.setItem('role', response.data.role);
         localStorage.setItem('id', response.data.id);
         localStorage.setItem('access-token', response.data.accessToken);
-        navigate("/admin/dashboard");
+        navigate("/doctor/dashboard");
 
     })
     .catch(function (error) {

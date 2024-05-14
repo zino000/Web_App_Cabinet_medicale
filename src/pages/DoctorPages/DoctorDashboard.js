@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Route,Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { WalletMinimal, Users, Hospital } from "lucide-react";
 import { useCountries } from "use-react-countries";
+import axios from "axios";
 
 import {
   List,
@@ -87,55 +88,9 @@ function DoctorDashboard() {
     },
   ];
 
-  const TABLE_HEAD = ["Membre", "email", "Fonction", "Téléphone", "Actions",];
+  const TABLE_HEAD = ["Patient", "email", "Date de naissance", "Téléphone", "Actions",];
 
-  const TABLE_ROWS = [
-    {
-      img: "https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-3.jpg",
-      name: "BENHIMA Salah",
-      email: "bnhhali@gmail.com",
-      job: "Manager",
-      org: "Organization",
-      online: true,
-      date: "0736382678",
-    },
-    {
-      img: "https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-2.jpg",
-      name: "BACHA Zinelabidine",
-      email: "bacha@gmail.com",
-      job: "Programator",
-      org: "Developer",
-      online: false,
-      date: "0736382678",
-    },
-    {
-      img: "https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-1.jpg",
-      name: "ELBHIHE Hamza",
-      email: "elbhihehamza@gmail.com",
-      job: "Executive",
-      org: "Projects",
-      online: false,
-      date: "0736382678",
-    },
-    {
-      img: "https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-4.jpg",
-      name: "BLJ Anass",
-      email: "bljanass@gmail.com",
-      job: "Programator",
-      org: "Developer",
-      online: true,
-      date: "0736382678",
-    },
-    {
-      img: "https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-5.jpg",
-      name: "RAMI Salah",
-      email: "ramisalah@gmail.com",
-      job: "Manager",
-      org: "Executive",
-      online: false,
-      date: "0736382678",
-    },
-  ];
+  
   
   const toggleSidebar = () => {
     setShowSidebar(!showSidebar);
@@ -151,6 +106,52 @@ function DoctorDashboard() {
   const handleDeleteConfirmation = () => {
     setIdToDelete(null);
   };
+  const [users, setUsers] = useState([]);
+  const [clinicDb, setClinicDb] = useState([]);
+  const [docs, setDocs] = useState([]);
+
+  const cdb = localStorage.getItem('clinic-database');
+  useEffect(() => {
+    const token = localStorage.getItem('access-token');
+    const role = localStorage.getItem('role');
+    const clinicDb = localStorage.getItem('clinic-database');
+
+    const fetchUsers = async () => {
+      const token = localStorage.getItem('access-token');
+      const role = localStorage.getItem('role');
+      setClinicDb(cdb);
+      if(cdb){
+        try {
+          axios.get('http://localhost:3002/patients', {
+              headers: {
+                  // 'Authorization': Bearer ${token} ,
+                  'access-token': token ,
+                  'clinic-database': cdb ,
+                  'role' : role
+              }
+          })
+          .then(response => {
+              //console.log(response.data[0].role);
+                
+                if(response.data){
+                    setUsers(response.data);
+                    const doctors = response.data.filter(user => user.role === "doctor");
+                    setDocs(doctors);
+                }
+                console.log(users);
+          })
+          .catch(error => {
+              console.log(error);
+          });
+        } catch (error) {
+          console.log("Token d'authentification non disponible.");
+        }
+      }
+    };
+  
+    fetchUsers();
+  }, []);
+  const TABLE_ROWS = users;
 
   return (
     
@@ -170,12 +171,12 @@ function DoctorDashboard() {
           <div className="mb-8 flex items-center justify-between gap-8">
             <div>
               <Typography variant="h5" color="blue-gray">
-                Liste des membres du cabinet
+                Liste des patients
               </Typography>
             </div>
             <div className="flex shrink-0 flex-col gap-2 2xl:flex-row">
               <Button onClick={() => setIdToDelete(1)} className="flex items-center gap-3" size="sm">
-                <UserPlusIcon strokeWidth={2} className="h-4 w-4" /> Ajouter un membre
+                <UserPlusIcon strokeWidth={2} className="h-4 w-4" /> Ajouter un patient
               </Button>
             </div>
           </div>
@@ -192,7 +193,7 @@ function DoctorDashboard() {
         <CardBody className="overflow-scroll px-0">
           <table className="mt-4 w-full min-w-max table-auto text-left">
             <thead>
-              <tr>
+            <tr>
                 {TABLE_HEAD.map((head) => (
                   <th
                     key={head}
@@ -210,15 +211,15 @@ function DoctorDashboard() {
               </tr>
             </thead>
             <tbody>
-              {TABLE_ROWS.map(
-                ({ img, name, email, job, org, online, date }, index) => {
+            {TABLE_ROWS.map(
+                ({ id, first_name, last_name, email, date_of_birth, phone }, index) => {
                   const isLast = index === TABLE_ROWS.length - 1;
                   const classes = isLast
                     ? "p-4"
                     : "p-4 border-b border-blue-gray-50";
                 
                   return (
-                    <tr key={name}>
+                    <tr key={id}>
                       <td className={classes}>
                         <div className="flex items-center gap-3">
                           <div className="flex flex-col">
@@ -227,7 +228,7 @@ function DoctorDashboard() {
                               color="blue-gray"
                               className="font-normal"
                             >
-                              {name}
+                              {first_name} {last_name}
                             </Typography>
                             
                           </div>
@@ -246,30 +247,29 @@ function DoctorDashboard() {
                         </div>
                       </td>
                       <td className={classes}>
-                        <div className="w-max">
-                          <Chip
-                            variant="ghost"
-                            size="sm"
-                            value={online ? "docteur" : "secrétaire"}
-                            color={online ? "green" : "blue-gray"}
-                          />
+                        <div className="flex flex-col">
+                          <Typography
+                            variant="small"
+                            color="blue-gray"
+                            className="font-normal"
+                          >
+                            {new Intl.DateTimeFormat('en-EN', { day: '2-digit', month: '2-digit', year: 'numeric' }).format(new Date(date_of_birth))}
+                          </Typography>
+                          
                         </div>
                       </td>
+
                       <td className={classes}>
                         <Typography
                           variant="small"
                           color="blue-gray"
                           className="font-normal"
                         >
-                          {date}
+                          {phone}
                         </Typography>
                       </td>
                       <td className={classes}>
-                        <Tooltip content="Modifier utilisateur">
-                          <IconButton variant="text">
-                            <PencilIcon className="h-4 w-4" />
-                          </IconButton>
-                        </Tooltip>
+                        <Button className=" bg-red-400 p-2">Supprimer</Button>
                       </td>
                     </tr>
                   );

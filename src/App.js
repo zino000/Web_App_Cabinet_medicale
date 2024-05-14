@@ -15,7 +15,7 @@ import AdminRDV from "./pages/AdminPages/AdminRDV";
 import AdminPatients from "./pages/AdminPages/AdminPatients";
 import SecretaryDashboard from "./pages/SecretaryPages/SecretaryDashboard";
 import DoctorDashboard from "./pages/DoctorPages/DoctorDashboard";
-
+import SecretaryRDV from "./pages/SecretaryPages/SecretaryRDV";
 
 //Providers
 //import { AdminProvider } from "../Contexts/AdminContext";
@@ -42,13 +42,14 @@ function App() {
             <Route path="/doctor/login" element={<DoctorLoginPage />}></Route>
             <Route path="/secretaire/login" element={<SecretaryLoginPage />}></Route>
             <Route path="/secretaire/dashboard" element={<SecretaryDashboard />}></Route>
-            {/* <Route path="/superAdmin/login" element={<SuperAdminLogin />}></Route> */}
+            <Route path="/superAdmin/login" element={<SuperAdminLogin />}></Route>
             <Route path="/superAdmin/dashboard" element={<SuperAdminDashboard />}></Route>
             <Route path="/admin/dashboard" element={<AdminDashboard />}></Route>
             <Route path="/admin/patients" element={<AdminPatients />}></Route>
             <Route path="/admin/rdv" element={<AdminRDV />}></Route>
             <Route path="/superAdmin/ajouterCabinet" element={<SuperAdminAddCabinet />}></Route>
             <Route path="/doctor/dashboard" element={<DoctorDashboard />}></Route>
+            <Route path="/secretaire/rdv" element={<SecretaryRDV />}></Route>
         </Routes>
       {/* <AdminProvider>
         <Routes>

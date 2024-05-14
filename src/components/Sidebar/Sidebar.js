@@ -123,7 +123,7 @@ export default function Sidebar({ children }) {
                     }
                     { (role == "secretary") &&
 
-                      <ListItem onClick={()=>{navigate('/secretaire/dashboard')}} className={`${expanded ? "" : "w-11"} `}>
+                      <ListItem onClick={()=>{navigate('/secretaire/rdv')}} className={`${expanded ? "" : "w-11"} `}>
                         <ListItemPrefix>
                           <Calendar className="h-5 w-5" />
                         </ListItemPrefix>
