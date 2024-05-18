@@ -16,6 +16,7 @@ import AdminPatients from "./pages/AdminPages/AdminPatients";
 import SecretaryDashboard from "./pages/SecretaryPages/SecretaryDashboard";
 import DoctorDashboard from "./pages/DoctorPages/DoctorDashboard";
 import SecretaryRDV from "./pages/SecretaryPages/SecretaryRDV";
+import SecretaryConsultation from "./pages/SecretaryPages/SecretaryConsultation";
 
 //Providers
 //import { AdminProvider } from "../Contexts/AdminContext";
@@ -35,7 +36,7 @@ function App() {
   return (
     <Router>
         <Routes>
-            <Route path="/" element={<Test />}></Route>
+            <Route path="/" element={<CabinetLoginPage />}></Route>
             <Route path="/cabinet/type-utilisateur" element={<ChoicePage />}></Route>
             <Route path="/cabinet/login" element={<CabinetLoginPage />}></Route>
             <Route path="/admin/login" element={<AdminLoginPage />}></Route>
@@ -50,6 +51,7 @@ function App() {
             <Route path="/superAdmin/ajouterCabinet" element={<SuperAdminAddCabinet />}></Route>
             <Route path="/doctor/dashboard" element={<DoctorDashboard />}></Route>
             <Route path="/secretaire/rdv" element={<SecretaryRDV />}></Route>
+            <Route path="/secretaire/rdv/consultation/:rdvId" element={<SecretaryConsultation />}></Route>
         </Routes>
       {/* <AdminProvider>
         <Routes>

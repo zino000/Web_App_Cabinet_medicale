@@ -85,22 +85,7 @@ function SecretaryRDV() {
   const [showSidebar, setShowSidebar] = useState(true);
   const [idToDelete, setIdToDelete] = useState();
 
-  const TABS = [
-    {
-      label: "Docteurs",
-      value: "docteurs",
-    },
-    {
-      label: "Secrétaire",
-      value: "secretaire",
-    },
-    {
-      label: "Patients",
-      value: "patients",
-    },
-  ];
-
-  const TABLE_HEAD = ["Patient", "email", "Date de naissance", "Téléphone", "Actions",];
+  const TABLE_HEAD = ["Patient", "Docteur", "Type de rdv", "Date", "Heure", "Status","Actions"];
 
   
   
@@ -209,7 +194,7 @@ function SecretaryRDV() {
   
   }, []);
 
-  const TABLE_ROWS = users;
+  const TABLE_ROWS = rdvs;
 
 
   const [nom, setNom] = useState();
@@ -406,41 +391,124 @@ function SecretaryRDV() {
                 Liste des rendez-vous
               </Typography>
             </div>
-            <div className="flex shrink-0 flex-col gap-2 2xl:flex-row">
-              <Button onClick={() => setDisplayed(1)} className="flex items-center gap-3" size="sm">
-                <UserPlusIcon strokeWidth={2} className="h-4 w-4" /> Ajouter un rendez-vous
-              </Button>
-            </div>
           </div>
           
         </CardHeader>
         <CardBody className="overflow-scroll px-0">
-        <CardBody className="overflow-scroll px-4 flex flex-wrap flex-row gap-4 items-start">
-          
-            {
-                rdvs.map((item) => (
-                    <TimelineItem className="w-[22rem]">
-                      <TimelineHeader className="relative rounded-xl border border-blue-gray-50 bg-white py-3 pl-4 pr-8 shadow-lg shadow-blue-gray-900/5">
-                        <TimelineIcon className="p-3" variant="ghost" color="red">
-                          <Calendar className="h-5 w-5" />
-                        </TimelineIcon>
-                        <div className="flex flex-col gap-1 items-start">
-                          <Typography variant="h6" color="blue-gray">
-                            {item.type}: {item.doctor_id} - {item.patient_id}
-                          </Typography>
-                          <Typography variant="small" color="gray" className="font-normal">
-                          Le {new Intl.DateTimeFormat('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric' }).format(new Date(item.date))} à {item.time}
-                          </Typography>
+        <table className="mt-4 w-full min-w-max table-auto text-left">
+            <thead>
+              <tr>
+                {TABLE_HEAD.map((head) => (
+                  <th
+                    key={head}
+                    className="border-y border-blue-gray-100 bg-blue-gray-50/50 p-4"
+                  >
+                    <Typography
+                      variant="small"
+                      color="blue-gray"
+                      className="font-normal leading-none opacity-70"
+                    >
+                      {head}
+                    </Typography>
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {TABLE_ROWS.map(
+                ({ id, patient_id, doctor_id, type, date, time, status }, index) => {
+                  const isLast = index === TABLE_ROWS.length - 1;
+                  const classes = isLast
+                    ? "p-4"
+                    : "p-4 border-b border-blue-gray-50";
+                
+                  return (
+                    <tr key={index}>
+                      <td className={classes}>
+                        <div className="flex items-center gap-3">
+                          <div className="flex flex-col">
+                            <Typography
+                              variant="small"
+                              color="blue-gray"
+                              className="font-normal"
+                            >
+                              {patient_id}
+                            </Typography>
+                            
+                          </div>
                         </div>
-                      </TimelineHeader>
-                    </TimelineItem>
-                    )
-                )
-            }
-          
-          
-          
-        </CardBody>
+                      </td>
+                      <td className={classes}>
+                        <div className="flex flex-col">
+                          <Typography
+                            variant="small"
+                            color="blue-gray"
+                            className="font-normal"
+                          >
+                            {doctor_id}
+                          </Typography>
+                          
+                        </div>
+                      </td>
+                      <td className={classes}>
+                        <div className="flex flex-col">
+                          <Typography
+                            variant="small"
+                            color="blue-gray"
+                            className="font-normal"
+                          >
+                            {type}
+                          </Typography>
+                          
+                        </div>
+                      </td>
+
+                      <td className={classes}>
+                        <Typography
+                          variant="small"
+                          color="blue-gray"
+                          className="font-normal"
+                        >
+                          {new Intl.DateTimeFormat('en-EN', { day: '2-digit', month: '2-digit', year: 'numeric' }).format(new Date(date))}
+                        </Typography>
+                      </td>
+                      <td className={classes}>
+                        <Typography
+                          variant="small"
+                          color="blue-gray"
+                          className="font-normal"
+                        >
+                          {time}
+                        </Typography>
+                      </td>
+                      <td className={classes}>
+                        <Typography
+                          variant="small"
+                          color="blue-gray"
+                          className="font-normal"
+                        >
+                          <div
+                            className={`rounded-full h-5 w-5 ${
+                              status === "pending"
+                                ? "bg-yellow-300"
+                                : status === "completed"
+                                ? "bg-green-300"
+                                : status === "cancelled"
+                                ? "bg-red-300"
+                                : "bg-gray-300" // default color if status is unknown
+                            }`}
+                          ></div>
+                        </Typography>
+                      </td>
+                      <td className={classes}>
+                        <Button onClick={()=>{navigate(`/secretaire/rdv/consultation/${patient_id}`)}} className="bg-blue-400 p-2">Infos</Button>
+                      </td>
+                    </tr>
+                  );
+                },
+              )}
+            </tbody>
+          </table>
         </CardBody>
         </Card>
         { displayed ? (
