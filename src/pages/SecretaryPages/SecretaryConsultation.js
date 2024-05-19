@@ -1,4 +1,5 @@
-import React, { useState, useEffect} from "react";
+import React, { useState, useEffect, useRef} from "react";
+import html2pdf from "html2pdf.js";
 import Sidebar from "../../components/Sidebar/Sidebar";
 import { SidebarItem } from "../../components/Sidebar/Sidebar";
 import { BrowserRouter as Router, Route, Link, useParams } from "react-router-dom";
@@ -6,6 +7,8 @@ import { useNavigate } from "react-router-dom";
 import { WalletMinimal, Users, Hospital, TrashIcon } from "lucide-react";
 import { useCountries } from "use-react-countries";
 import axios from "axios";
+import jsPDF from "jspdf";
+
 
 import {
   List,
@@ -75,6 +78,19 @@ function SecretaryConsultation() {
   const [clinicDb, setClinicDb] = useState([]);
 
 
+  const contentRef = useRef(null);
+
+  const handleDownloadPDF = () => {
+    const opt = {
+      margin: 0,
+      filename: "document.pdf",
+      image: { type: "jpeg", quality: 0.98 },
+      html2canvas: { scale: 2 },
+      jsPDF: { unit: "in", format: "a4", orientation: "portrait" },
+    };
+
+    html2pdf().from(contentRef.current).set(opt).save();
+  };
   
   
   
@@ -157,6 +173,8 @@ function SecretaryConsultation() {
   }, []);
 
 
+  const [text, setText] = useState();
+  const [motifConsultation, setMotifConsultation] = useState();
   
 
   
@@ -184,7 +202,139 @@ function SecretaryConsultation() {
          
         </CardHeader>
         <CardBody className="overflow-scroll px-0">
-          
+          <h1 class="text-3xl mb-5">Details Consultation :</h1>
+          <div class="grid grid-cols-2 gap-2">
+            <div>
+              <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-password">
+                Motif Consultation
+              </label>
+              <input class="appearance-none block w-full bg-gray-200 text-gray-700 border  rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-first-name" type="text" placeholder="" value={motifConsultation} onChange={(e) => setMotifConsultation(e.target.value)}/>
+              {/* <p class="text-gray-600 text-xs italic">Make it as long and as crazy as you'd like</p> */}
+            </div>
+            <div>
+              <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-password" >
+                Examen Clinique
+              </label>
+              <select name="roler" class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-state">
+                <option value="">Choisir</option>
+                <option value="">Examen 1</option>
+                <option value="">Examen 2</option>
+                <option value="">Examen 3</option>
+                <option value="">Examen 4</option>
+              </select>
+            </div>
+            <div>
+              <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-password" >
+                Resultat de l'examen clinique
+              </label>
+              <textarea class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-password" type="text"></textarea>
+
+              {/* <textarea class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-password" type="text" ></textarea> */}
+              {/* <p class="text-gray-600 text-xs italic">Make it as long and as crazy as you'd like</p> */}
+            </div>
+            <div>
+              <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-password" >
+              Resultat de l'examen paraclinique
+              </label>
+              <textarea class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-password" type="text"></textarea>
+              {/* <p class="text-gray-600 text-xs italic">Make it as long and as crazy as you'd like</p> */}
+            </div>
+            </div>
+
+          <div class="grid grid-cols-7 gap-2">
+            <div>
+              <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-password" >
+                DiabÃ©te
+              </label>
+              <select name="roler" class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-state">
+                <option value="">choisir</option>
+                <option value="">Oui</option>
+                <option value="">Non</option>
+              </select>
+            </div>
+            <div>
+              <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-password" >
+                HTA
+              </label>
+              <select name="roler" class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-state">
+                <option value="">choisir</option>
+                <option value="">Oui</option>
+                <option value="">Non</option>
+              </select>
+            </div>
+            <div>
+              <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-password" >
+                Tabac
+              </label>
+              <select name="roler" class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-state">
+                <option value="">choisir</option>
+                <option value="">Oui</option>
+                <option value="">Non</option>
+              </select>
+            </div>
+            <div>
+              <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-password" >
+                Ac . urique
+              </label>
+              <select name="roler" class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-state">
+                <option value="">choisir</option>
+                <option value="">Oui</option>
+                <option value="">Non</option>
+              </select>
+            </div>
+            <div>
+              <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-password" >
+                Alcool
+              </label>
+              <select name="roler" class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-state">
+                <option value="">choisir</option>
+                <option value="">Oui</option>
+                <option value="">Non</option>
+              </select>
+            </div>
+            <div>
+              <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-password" >
+                DysliploÃ©mie
+              </label>
+              <select name="roler" class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-state">
+                <option value="">choisir</option>
+                <option value="">Oui</option>
+                <option value="">Non</option>
+              </select>
+            </div>
+            <div>
+              <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-password" >
+                ObÃ©sitÃ©
+              </label>
+              <select name="roler" class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-state">
+                <option value="">choisir</option>
+                <option value="">Oui</option>
+                <option value="">Non</option>
+              </select>
+            </div>
+
+
+
+
+          </div>
+
+
+          <div class="grid grid-cols-1 gap-2">
+
+          </div>
+          <div className="w-full bg-white shadow-md rounded-md p-8 flex flex-col items-start" ref={contentRef}>
+            <h1 className="text-2xl font-bold mb-4">Consultation :</h1>
+            <p className="text-lg mb-4"><b>Motif de consultation: </b>{motifConsultation}</p>
+            <p className="text-lg">
+              exemplesdkjnsjkdnfskdnkjsndfk
+            </p>
+          </div>
+          <button
+            className="mt-8 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+            onClick={handleDownloadPDF}
+          >
+            Download PDF
+          </button>
         </CardBody>
         </Card>
     </div>
